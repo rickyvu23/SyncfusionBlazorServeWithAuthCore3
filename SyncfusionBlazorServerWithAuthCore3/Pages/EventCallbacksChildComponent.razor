@@ -1,0 +1,37 @@
+﻿<div>
+    <input class="form-control"
+           type="text"
+           placeholder="@FieldName" style="max-width:250px; min-width:200px" 
+           value="@Value" @oninput="OnValueChanged" maxlength="@MaxLength" />
+</div>
+<div class="">
+    <i>Total Characters : @TextLength/@LengthString</i>
+</div>
+    @code {
+        [Parameter]
+        public string Value { get; set; }
+        [Parameter]
+        public string FieldName { get; set; }
+        [Parameter]
+        public int MaxLength { get; set; } = -1;
+        [Parameter]
+        public EventCallback<string> ValueChanged { get; set; }
+        [Parameter]
+        public EventCallback<string> OnChildName { get; set; }
+        string LengthString;
+        int TextLength;
+        protected override void OnInitialized()
+        {
+            TextLength = Value.Length;
+            LengthString = (MaxLength == -1) ? "Unlimited" : MaxLength.ToString();
+        }
+        private async Task OnValueChanged(ChangeEventArgs e)
+        {
+            
+            Value = e.Value.ToString();
+            await OnChildName.InvokeAsync(Value);
+
+            TextLength = Value.Length;
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }

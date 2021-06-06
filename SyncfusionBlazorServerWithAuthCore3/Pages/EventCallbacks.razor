@@ -1,0 +1,20 @@
+﻿@page "/EventCallbacks"
+<h3>Event Call-backs</h3>
+
+<span>@NameChanged</span>
+
+
+<EventCallbacksChildComponent OnChildName="ChildNameChanged"  
+@bind-Value="name" FieldName="Name" MaxLength="20"/>
+@code {
+    string name = "Lam Vu";
+    string NameChanged = "";
+    protected override void OnInitialized()
+    {
+        NameChanged = name;
+    }
+    protected void ChildNameChanged(string name)
+    {
+        NameChanged = name;
+    }
+}
